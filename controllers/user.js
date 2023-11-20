@@ -1,0 +1,42 @@
+//Importamos el model
+const User = require("../models/user")
+
+const getUsers = async(req,res)=>{
+    try {
+        const users = await User.find();
+        if(users.length<1){
+            res.status(200).json("No hay usuarios");
+        }else{
+            res.status(200).json(users);
+        }
+    } catch (error) {
+        res.status(500).json({message:error});
+    }
+}
+const getUser = async(req, res)=>{
+    try {
+        paramsId = req.params.id;
+        const user = await User.findById(paramsId);
+        if(!user){
+            res.status(404).json(`No existe un usuario con id: ${paramsId}`);
+        }else{
+            res.status(200).json(user);
+        }
+    } catch (error) {
+        res.status(500).json({message:error});
+    }
+}
+
+const addUsers = async(req,res)=>{
+    const user = req.body;
+    const newUser = new User(user);
+    try {
+        await newUser.save();
+        res.status(201).json(newUser)
+    } catch (error) {
+        res.status(500).json({message:error})
+    }
+}
+
+//Exportamos los metodos del controller
+module.exports={getUsers, addUsers, getUser}

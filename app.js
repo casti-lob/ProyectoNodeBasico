@@ -9,6 +9,9 @@ mongoose.set("strictQuery", false);
 app.use(cors())
 app.use(express.json())//Middelware para que pueda obtener el body
 
+//Importamos el router de user
+const userRoutes = require('./routes/user')
+app.use('/users',userRoutes)
 
 
 //Conexion BBDD
