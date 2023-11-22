@@ -13,6 +13,10 @@ app.use(express.json())//Middelware para que pueda obtener el body
 const userRoutes = require('./routes/user')
 app.use('/users',userRoutes)
 
+//Importamos el router de museum
+const museumRoutes = require('./routes/museum')
+app.use('/museums',museumRoutes)
+
 
 //Conexion BBDD
 async function main(){

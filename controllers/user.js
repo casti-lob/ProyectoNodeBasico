@@ -38,5 +38,37 @@ const addUsers = async(req,res)=>{
     }
 }
 
+const deleteUser = async(req,res)=>{
+    const idUser = req.params.id
+    try {
+        const user = User.findById(idUser)
+        if(!user){
+            res.status(404).json(`No existe un usuario con id: ${idUser}`);
+        }else{
+            res.status(200).json(await User.deleteOne(user))
+        }
+    } catch (error) {
+        res.status(500).json({message:error})
+    }
+}
+
+const updateUser = async(req,res)=>{
+    const idUser= req.params.id
+    const newUser = req.body
+    try {
+      const oldUse = await User.findById(idUser);
+      if(!oldUse){
+        res.status(404).json("No existe el usuario");
+      }else{
+        await oldUse.updateOne(newUser)
+        res.status(200).json(await User.findById(idUser))
+      }
+
+    } catch (error) {
+      res.status(500).json({message:error})
+    }
+
+}
+
 //Exportamos los metodos del controller
-module.exports={getUsers, addUsers, getUser}
+module.exports={getUsers, addUsers, getUser, deleteUser, updateUser}
