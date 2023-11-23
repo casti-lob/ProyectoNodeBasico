@@ -41,7 +41,7 @@ const addMuseum = async(req,res)=>{
 const deleteMuseum = async(req,res)=>{
     const idMuseum = req.params.id
     try {
-        const museum = Museum.findById(idMuseum)
+        const museum = await Museum.findById(idMuseum)
         if(!museum){
             res.status(404).json(`No existe un usuario con id: ${idMuseum}`);
         }else{
@@ -60,7 +60,7 @@ const updateMuseum = async(req,res)=>{
       if(!oldMuseum){
         res.status(404).json("No existe el usuario");
       }else{
-        await oldUse.updateOne(newMuseum)
+        await oldMuseum.updateOne(newMuseum)
         res.status(200).json(await Museum.findById(idMuseum))
       }
 

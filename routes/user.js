@@ -6,7 +6,8 @@ const{getUsers, addUsers, getUser, deleteUser, updateUser}= require('../controll
 
 //Validaciones
 const{check}= require('express-validator')
-const{validateFields}= require('../middlewares/validate-fields')
+const{validateFields}= require('../middlewares/validate-fields');
+const { existsEmail } = require("../helpers/db-validators");
 
 
 router
@@ -18,6 +19,7 @@ router
     check('age', 'Tienes que tener entre 4 y 100 años para aceptarte ').isInt({min:4,max:100}),
     check('email','El email es requerido').trim().not().isEmpty(),
     check('password','La contraseña es requerida').trim().not().isEmpty(),
+    check('email').custom(existsEmail),
     validateFields
 ],addUsers)
 //validar numero check().isInt({min:0,max:13})
