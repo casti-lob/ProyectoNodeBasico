@@ -1,24 +1,25 @@
 //Importamos el model
-const Museum = require("../models/museum")
+const MuseumsVisited = require("../models/museumsVisited")
 
-const getMuseums = async(req,res)=>{
+const getMuseumsV = async(req,res)=>{
     try {
-        const museum = await Museum.find();
-        if(museum.length<1){
-            res.status(200).json("No hay museos");
+        const museums = await MuseumsVisited.find();
+        if(museums.length<1){
+            res.status(200).json("No has visitado ningun museo");
         }else{
-            res.status(200).json(museum);
+            res.status(200).json(museums);
         }
     } catch (error) {
         res.status(500).json({message:error});
     }
 }
-const getMuseum = async(req, res)=>{
+const getMuseumV = async(req, res)=>{
     try {
         paramsId = req.params.id;
-        const museum = await Museum.findById(paramsId);
+
+        const museum = await MuseumsVisited.findById(paramsId);
         if(!museum){
-            res.status(404).json(`No existe un museo con id: ${paramsId}`);
+            res.status(404).json(`No existe o has visitado un museo con id: ${paramsId}`);
         }else{
             res.status(200).json(museum);
         }
@@ -27,9 +28,11 @@ const getMuseum = async(req, res)=>{
     }
 }
 
-const addMuseum = async(req,res)=>{
+const addMuseumV = async(req,res)=>{
     const museum = req.body;
-    const newMuseum = new Museum(museum);
+    
+   
+    const newMuseum = new MuseumsVisited(museum);
     try {
         await newMuseum.save();
         res.status(201).json(newMuseum)
@@ -38,13 +41,14 @@ const addMuseum = async(req,res)=>{
     }
 }
 
-const deleteMuseum = async(req,res)=>{
+const deleteMuseumV = async(req,res)=>{
     const idMuseum = req.params.id
     try {
-        const museum = await Museum.findById(idMuseum)
+        const museum = await MuseumsVisited.findById(idMuseum)
         if(!museum){
             res.status(404).json(`No existe un museo con id: ${idMuseum}`);
-        }else{await Museum.deleteOne(museum)
+        }else{
+            await MuseumsVisited.deleteOne(museum)
             res.status(200).json(museum)
         }
     } catch (error) {
@@ -52,16 +56,16 @@ const deleteMuseum = async(req,res)=>{
     }
 }
 
-const updateMuseum = async(req,res)=>{
+const updateMuseumV = async(req,res)=>{
     const idMuseum= req.params.id
     const newMuseum = req.body
     try {
-      const oldMuseum = await Museum.findById(idMuseum);
+      const oldMuseum = await MuseumsVisited.findById(idMuseum);
       if(!oldMuseum){
-        res.status(404).json("No existe el museo");
+        res.status(404).json("No existe el usuario");
       }else{
         await oldMuseum.updateOne(newMuseum)
-        res.status(200).json(await Museum.findById(idMuseum))
+        res.status(200).json(await MuseumsVisited.findById(idMuseum))
       }
 
     } catch (error) {
@@ -71,4 +75,4 @@ const updateMuseum = async(req,res)=>{
 }
 
 //Exportamos los metodos del controller
-module.exports={getMuseums, addMuseum, getMuseum, deleteMuseum, updateMuseum}
+module.exports={getMuseumsV,getMuseumV,addMuseumV,updateMuseumV,deleteMuseumV}

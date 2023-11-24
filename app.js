@@ -17,6 +17,9 @@ app.use('/users',userRoutes)
 const museumRoutes = require('./routes/museum')
 app.use('/museums',museumRoutes)
 
+//Importamos el router de museum
+const museumVisitedRoutes = require('./routes/museumsVisited')
+app.use('/museumsVisited',museumVisitedRoutes)
 
 //Conexion BBDD
 async function main(){

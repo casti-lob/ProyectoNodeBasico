@@ -45,7 +45,8 @@ const deleteUser = async(req,res)=>{
         if(!user){
             res.status(404).json(`No existe un usuario con id: ${idUser}`);
         }else{
-            res.status(200).json(await User.deleteOne(user))
+            await User.deleteOne(user)
+            res.status(200).json(user)
         }
     } catch (error) {
         res.status(500).json({message:error})
