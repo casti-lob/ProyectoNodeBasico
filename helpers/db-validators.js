@@ -20,4 +20,6 @@ const existsMuseum = async (id)=>{
         throw new Error(`Id Museo ${id} does not exist`)
     }
 }
+
+
 module.exports ={existsEmail, existsUser, existsMuseum}

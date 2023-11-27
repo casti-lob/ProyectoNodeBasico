@@ -61,8 +61,15 @@ const updateUser = async(req,res)=>{
       if(!oldUse){
         res.status(404).json("No existe el usuario");
       }else{
-        await oldUse.updateOne(newUser)
-        res.status(200).json(await User.findById(idUser))
+        const email = newUser.email
+        const existsEmail = await User.findOne({email})
+        if(existsEmail&& existsEmail._id!=idUser){
+            res.status(404).json("Ese email lo tiene otro usuario");
+        }else{
+            await oldUse.updateOne(newUser)
+            res.status(200).json(await User.findById(idUser))
+        }
+       
       }
 
     } catch (error) {
