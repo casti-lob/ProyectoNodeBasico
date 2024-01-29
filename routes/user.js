@@ -2,13 +2,16 @@ const express = require("express")
 const router = express.Router();
 
 //Importamos Controller
-const{getUsers, addUsers, getUser, deleteUser, updateUser}= require('../controllers/user')
+const{getUsers, addUsers, getUser, deleteUser, updateUser, login}= require('../controllers/user')
 
 //Validaciones
 const{check}= require('express-validator')
 const{validateFields}= require('../middlewares/validate-fields');
 const { existsEmail } = require("../helpers/db-validators");
 
+router
+.route('/login')
+.get(login)
 
 router
 .route('/')
@@ -42,5 +45,7 @@ router
     check('password','La contraseña es requerida').trim().not().isEmpty(),
     validateFields
 ],updateUser)
+
+
 
 module.exports = router
