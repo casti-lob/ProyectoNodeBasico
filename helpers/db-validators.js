@@ -7,6 +7,13 @@ const existsEmail = async (email)=>{
     }
 }
 
+const existsUserName = async (userName)=>{
+    const userNameDb = await User.findOne({userName})
+    if(userNameDb){
+        throw new Error(`El usuario ${userName} already exists`)//lo requiere el check para validar personalizado
+    }
+}
+
 const existsUser = async (id)=>{
     const userDb = await User.findById(id)
     if(!userDb){
@@ -22,4 +29,4 @@ const existsMuseum = async (id)=>{
 }
 
 
-module.exports ={existsEmail, existsUser, existsMuseum}
+module.exports ={existsEmail, existsUser, existsMuseum, existsUserName}

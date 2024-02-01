@@ -47,6 +47,7 @@ const login= async (req,res)=>{
 const addUsers = async(req,res)=>{
     const user = req.body;
     const newUser = new User(user);
+    newUser.active= true;
     try {
         await newUser.save();
         res.status(201).json(newUser)
@@ -58,12 +59,14 @@ const addUsers = async(req,res)=>{
 const deleteUser = async(req,res)=>{
     const idUser = req.params.id
     try {
-        const user = User.findById(idUser)
-        if(!user){
+        const oldUser = await User.findById(idUser)
+        
+        if(!oldUser){
             res.status(404).json(`No existe un usuario con id: ${idUser}`);
         }else{
-            await User.deleteOne(user)
-            res.status(200).json(user)
+            oldUser.active= false;
+           await oldUser.findByIdAndUpdate(idUser,oldUser)
+           res.status(200).json(oldUser)
         }
     } catch (error) {
         res.status(500).json({message:error})
