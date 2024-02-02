@@ -21,6 +21,10 @@ app.use('/museums',museumRoutes)
 const museumVisitedRoutes = require('./routes/museumsVisited')
 app.use('/museumsVisited',museumVisitedRoutes)
 
+//Importamos el router de auth
+const authRoutes = require('./routes/auth')
+app.use('/auth',authRoutes)
+
 //Conexion BBDD
 async function main(){
     await mongoose.connect(process.env.MONGO_CNN);

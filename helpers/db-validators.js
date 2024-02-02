@@ -7,6 +7,12 @@ const existsEmail = async (email)=>{
     }
 }
 
+const rolValid = async(rol)=>{
+    if(rol!=='ADMIN_ROLE'&&rol!=='USER_ROLE'){
+        throw new Error(`Solo se admite de rol ADMIN_ROLE y USER_ROLE`)
+    }
+}
+
 const existsUserName = async (userName)=>{
     const userNameDb = await User.findOne({userName})
     if(userNameDb){
@@ -29,4 +35,4 @@ const existsMuseum = async (id)=>{
 }
 
 
-module.exports ={existsEmail, existsUser, existsMuseum, existsUserName}
+module.exports ={existsEmail, existsUser, existsMuseum, existsUserName, rolValid}

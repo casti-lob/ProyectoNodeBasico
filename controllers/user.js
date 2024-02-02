@@ -1,6 +1,9 @@
 //Importamos el model
 const User = require("../models/user")
 
+const bcryptjs = require('bcryptjs')
+
+
 const getUsers = async(req,res)=>{
     try {
         const users = await User.find();
@@ -27,26 +30,16 @@ const getUser = async(req, res)=>{
     }
 }
 
-//login
-const login= async (req,res)=>{
-    const{name,password}= req.body;
-    try {
-        const user= await User.findOne({name})
-        
-        if(!user || user.password != password){
-            return res.status(400).json({mensage:`Las credenciales estan mal`})
-        }else{
-            res.status(200).json(user)
-        }
-        
-    } catch (error) {
-        res.status(500).json({message:error});
-    }
-}
 
 const addUsers = async(req,res)=>{
     const user = req.body;
     const newUser = new User(user);
+
+    //Encriptado password
+    const salt = bcryptjs.genSaltSync();
+    const encryptedPassword = bcryptjs.hashSync( newUser.password, salt);
+    newUser.password= encryptedPassword
+
     newUser.active= true;
     try {
         await newUser.save();
@@ -64,8 +57,10 @@ const deleteUser = async(req,res)=>{
         if(!oldUser){
             res.status(404).json(`No existe un usuario con id: ${idUser}`);
         }else{
+            console.log(oldUser);
             oldUser.active= false;
-           await oldUser.findByIdAndUpdate(idUser,oldUser)
+            console.log(oldUser);
+            await User.findByIdAndUpdate(idUser,oldUser)
            res.status(200).json(oldUser)
         }
     } catch (error) {
@@ -99,4 +94,4 @@ const updateUser = async(req,res)=>{
 }
 
 //Exportamos los metodos del controller
-module.exports={getUsers, addUsers, getUser, deleteUser, updateUser, login}
+module.exports={getUsers, addUsers, getUser, deleteUser, updateUser}

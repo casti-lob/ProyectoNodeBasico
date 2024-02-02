@@ -2,16 +2,13 @@ const express = require("express")
 const router = express.Router();
 
 //Importamos Controller
-const{getUsers, addUsers, getUser, deleteUser, updateUser, login}= require('../controllers/user')
+const{getUsers, addUsers, getUser, deleteUser, updateUser}= require('../controllers/user')
 
 //Validaciones
 const{check}= require('express-validator')
 const{validateFields}= require('../middlewares/validate-fields');
-const { existsEmail, existsUserName } = require("../helpers/db-validators");
+const { existsEmail, existsUserName, rolValid } = require("../helpers/db-validators");
 
-router
-.route('/login')
-.get(login)
 
 router
 .route('/')
@@ -22,9 +19,10 @@ router
     check('userName','El nombre de usuario es requerido').trim().not().isEmpty(),
     check('age', 'Tienes que tener entre 4 y 100 años para aceptarte ').isInt({min:4,max:100}),
     check('email','El email es requerido').trim().not().isEmpty(),
-    check('email','El email tiene que ser un email valido').not().isEmail(),
+    check('email','El email tiene que ser un email valido').isEmail(),
     check('password','La contraseña es requerida').trim().not().isEmpty(),
     check('rol','El rol es requerida').trim().not().isEmpty(),
+    check('rol').custom(rolValid),
     check('email').custom(existsEmail),
     check('userName').custom(existsUserName),
     validateFields
