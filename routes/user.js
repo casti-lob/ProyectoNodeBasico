@@ -7,7 +7,9 @@ const{getUsers, addUsers, getUser, deleteUser, updateUser}= require('../controll
 //Validaciones
 const{check}= require('express-validator')
 const{validateFields}= require('../middlewares/validate-fields');
-const { existsEmail, existsUserName, rolValid } = require("../helpers/db-validators");
+
+const { existsEmail, existsUserName, rolValid, } = require("../helpers/db-validators");
+const { validateJWT } = require("../middlewares/validate-jwt");
 
 
 router
@@ -34,6 +36,7 @@ router
     validateFields
 ],getUser)
 .delete([
+    validateJWT,
     check('id', 'No es un id de Mongo válido').isMongoId(),
     validateFields
 ],deleteUser)

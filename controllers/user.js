@@ -58,6 +58,13 @@ const deleteUser = async(req,res)=>{
         if(!oldUser){
             res.status(404).json(`No existe un usuario con id: ${idUser}`);
         }else{
+
+            const userLog = req.userLogin
+            if(userLog.rol !='ADMIN_ROLE'){
+               return res.status(401).json(`El usuario no es administrador para realizar la acción`)
+        
+            }
+            
             console.log(oldUser);
             oldUser.active= false;
             console.log(oldUser);
