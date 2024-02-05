@@ -21,8 +21,7 @@ router
     check('email','El email es requerido').trim().not().isEmpty(),
     check('email','El email tiene que ser un email valido').isEmail(),
     check('password','La contraseña es requerida').trim().not().isEmpty(),
-    check('rol','El rol es requerida').trim().not().isEmpty(),
-    check('rol').custom(rolValid),
+    //check('rol').custom(rolValid),
     check('email').custom(existsEmail),
     check('userName').custom(existsUserName),
     validateFields

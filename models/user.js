@@ -12,4 +12,10 @@ const UserSchema = new Schema({
     active:{type:Boolean}
 })
 
+UserSchema.methods.toJSON = function(){
+    const {__v,password,_id,...user}=this.toObject()
+    user.uid = _id
+    return user
+}
+
 module.exports= mongoose.model("user", UserSchema)

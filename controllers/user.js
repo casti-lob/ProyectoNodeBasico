@@ -32,15 +32,16 @@ const getUser = async(req, res)=>{
 
 
 const addUsers = async(req,res)=>{
-    const user = req.body;
+    const user = req.body;//Hay que restringir los parametros 
     const newUser = new User(user);
 
     //Encriptado password
     const salt = bcryptjs.genSaltSync();
     const encryptedPassword = bcryptjs.hashSync( newUser.password, salt);
     newUser.password= encryptedPassword
-
+    //el login por post y el rol
     newUser.active= true;
+    newUser.rol= "USER_ROLE"
     try {
         await newUser.save();
         res.status(201).json(newUser)

@@ -1,5 +1,6 @@
 const User = require("../models/user")
 const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 //login
 const login= async (req,res)=>{
@@ -14,7 +15,13 @@ const login= async (req,res)=>{
         }else if(user.active==false){
             return res.status(401).json({mensage:`Lo sentimos pero el usuario no está activo`})
         }else{
-            res.status(200).json(user)
+            
+            //Generar el JWT token
+            
+            const payload ={uid: user.id};
+            const token = jwt.sign(payload, process.env.SECRET,{expiresIn:'4h'})  
+
+            res.status(200).json({user,token})
         }
         
     } catch (error) {
