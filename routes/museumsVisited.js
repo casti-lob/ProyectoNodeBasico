@@ -8,11 +8,19 @@ const{getMuseumsV,addMuseumV,deleteMuseumV,getMuseumV,updateMuseumV}= require('.
 const{check}= require('express-validator')
 const{validateFields}= require('../middlewares/validate-fields');
 const { existsUser, existsMuseum } = require("../helpers/db-validators");
+const { validateJWT } = require("../middlewares/validate-jwt");
+const { hasRoles } = require("../middlewares/hasRole");
 
 router
 .route('/')
-.get(getMuseumsV)
+.get([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
+    getMuseumsV
+    ])
 .post([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
     check('idUser','No es un id de Mongo válido').isMongoId(),
     check('idUser').custom(existsUser),
     check('idMuseum','No es un id de Mongo válido').isMongoId(),
@@ -25,14 +33,20 @@ router
 router
 .route('/:id')
 .get([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     validateFields
 ],getMuseumV)
 .delete([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     validateFields
 ],deleteMuseumV)
 .put([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
     check('idUser','No es un id de Mongo válido').isMongoId(),
     check('idUser').custom(existsUser),
     check('idMuseum','No es un id de Mongo válido').isMongoId(),

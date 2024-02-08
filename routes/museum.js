@@ -6,12 +6,16 @@ const{getMuseum,getMuseums,addMuseum,deleteMuseum,updateMuseum}= require('../con
 
 //Validaciones
 const{check}= require('express-validator')
-const{validateFields}= require('../middlewares/validate-fields')
+const{validateFields}= require('../middlewares/validate-fields');
+const { validateJWT } = require("../middlewares/validate-jwt");
+const { hasRoles } = require("../middlewares/hasRole");
 
 router
 .route('/')
 .get(getMuseums)
 .post([
+    validateJWT,
+    hasRoles('ADMIN_ROLE'),
     check('name','El nombre del museo es obligatorio').trim().not().isEmpty(),
     check('name','La longitud del nombre del usuario no puede ser menor de 3 ').isLength({min:2}),
     check('country','El pais del museo es obligatorio').trim().not().isEmpty(),
@@ -29,10 +33,14 @@ router
     validateFields
 ],getMuseum)
 .delete([
+    validateJWT,
+    hasRoles('ADMIN_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     validateFields
 ],deleteMuseum)
 .put([
+    validateJWT,
+    hasRoles('ADMIN_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('name','El nombre del museo es obligatorio').trim().not().isEmpty(),
     check('name','La longitud del nombre del usuario no puede ser menor de 3 ').isLength({min:2}),

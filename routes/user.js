@@ -10,6 +10,7 @@ const{validateFields}= require('../middlewares/validate-fields');
 
 const { existsEmail, existsUserName, rolValid, } = require("../helpers/db-validators");
 const { validateJWT } = require("../middlewares/validate-jwt");
+const { hasRoles } = require("../middlewares/hasRole");
 
 
 router
@@ -37,10 +38,13 @@ router
 ],getUser)
 .delete([
     validateJWT,
+    hasRoles('ADMIN_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     validateFields
 ],deleteUser)
 .put([
+    validateJWT,
+    hasRoles('ADMIN_ROLE','USER_ROLE'),
     check('id', 'No es un id de Mongo válido').isMongoId(),
     check('name','El nombre del usuario es obligatorio').trim().not().isEmpty(),
     check('name','La longitud del nombre del usuario no puede ser menor de 2 o mayor de 20').isLength({min:2, max:20}),
